@@ -1,0 +1,19 @@
+DirectoryIndex index.php
+
+<FilesMatch "^(config\.php|cloudinary\.php|\.env.*)$">
+	Require all denied
+</FilesMatch>
+
+<FilesMatch "\.sql$">
+	Require all denied
+</FilesMatch>
+
+RedirectMatch 403 ^/\.history/
+
+RewriteEngine On
+RewriteRule ^admin/customers/?$ admin/customers.php [L]
+RewriteRule ^admin/categories/?$ admin/categories.php [L]
+RewriteRule ^admin/reports/?$ admin/reports.php [L]
+RewriteRule ^admin/delivery/?$ admin/delivery.php [L]
+RewriteRule ^admin/settings/?$ admin/settings.php [L]
+RewriteRule ^admin/promo-codes/?$ admin/promo-codes.php [L]
