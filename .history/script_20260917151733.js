@@ -15,28 +15,6 @@ function showNotification(message, icon = "info"){
     console.warn(text);
 }
 
-    async function readJsonResponse(response){
-        const text = await response.text();
-        let data;
-
-        try{
-            data = text ? JSON.parse(text) : null;
-        }catch(error){
-            const serverMessage = text.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
-            throw new Error(
-                serverMessage
-                    ? `সার্ভার সঠিক উত্তর দেয়নি: ${serverMessage.slice(0, 240)}`
-                    : `সার্ভার কোনো উত্তর দেয়নি (HTTP ${response.status})।`
-            );
-        }
-
-        if(!data || typeof data !== "object"){
-            throw new Error(`সার্ভার সঠিক JSON উত্তর দেয়নি (HTTP ${response.status})।`);
-        }
-
-        return data;
-    }
-
 window.alert = function(message){
     return showNotification(message, "info");
 };
@@ -554,7 +532,7 @@ async function uploadProfilePhoto(input){
     reader.onload = async () => {
         try{
             const response = await fetch("order-api.php", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({action:"profile_photo", customer_phone:saved.phone, photo_data:reader.result})});
-            const data = await readJsonResponse(response);
+            const data = await response.json();
             if(!data.success) throw new Error(data.message || "ছবি আপলোড করা যায়নি।");
             saved.photo_url = data.photo_url;
             localStorage.setItem("customer_session", JSON.stringify(saved));
@@ -579,7 +557,7 @@ async function loadCustomerOrders(phone){
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify({action:"orders", customer_phone:phone})
         });
-        const data = await readJsonResponse(response);
+        const data = await response.json();
         if(!data.success || !Array.isArray(data.orders) || !data.orders.length){
             box.innerHTML = '<div style="padding:20px;text-align:center;color:#6b7280;">এখনো কোনো অর্ডার পাওয়া যায়নি।</div>';
             return;
@@ -1799,7 +1777,7 @@ async function applyCheckoutPromo(){
             }
         );
 
-        const data = await readJsonResponse(response);
+        const data = await response.json();
 
         if(!response.ok || !data.success){
             throw new Error(
@@ -2042,7 +2020,7 @@ async function confirmCartOrder(){
             }
         );
 
-        const data = await readJsonResponse(response);
+        const data = await response.json();
 
         if(!response.ok || !data.success){
             throw new Error(
@@ -2233,7 +2211,7 @@ async function loadHeroBanners(){
             throw new Error("Hero API request failed");
         }
 
-        const data = await readJsonResponse(response);
+        const data = await response.json();
 
         if(!data.success || !Array.isArray(data.banners)){
             throw new Error("Hero data not found");
