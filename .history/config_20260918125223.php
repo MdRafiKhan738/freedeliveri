@@ -6,7 +6,7 @@ const DB_HOST = 'localhost';
 const DB_NAME = 'freedeli_Toha';
 const DB_USER = 'freedeli_freedelivery';
 const DB_PASS = 'freedelivery12345@#';
-
+bb
 function db(): PDO
 {
     static $pdo = null;

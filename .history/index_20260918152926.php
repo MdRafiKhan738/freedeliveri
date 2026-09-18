@@ -1081,7 +1081,7 @@ document.querySelectorAll(".product-card").forEach((card) => {
 });
 </script>
 
-<script src="script.js?v=30" defer></script>
+<script src="script.js?v=29" defer></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         if (window.lucide) lucide.createIcons();

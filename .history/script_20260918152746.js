@@ -392,17 +392,10 @@ function showCustomerAccount(customer){
 
     const profileImage = document.getElementById("accountProfileImage");
     const profileIcon = document.getElementById("accountProfileIcon");
-    const headerButton = document.getElementById("headerAccountButton");
-    const headerIcon = document.getElementById("headerAccountIcon");
     if(profileImage && profileIcon && customer.photo_url){
-        const photoUrl = customer.photo_url + (customer.photo_url.includes("?") ? "&" : "?") + "v=" + Date.now();
-        profileImage.src = photoUrl;
+        profileImage.src = customer.photo_url + "&v=" + Date.now();
         profileImage.style.display = "block";
         profileIcon.style.display = "none";
-        if(headerButton && headerIcon){
-            headerIcon.className = "";
-            headerIcon.style.cssText = `display:block;width:34px;height:34px;border-radius:50%;background:url('${photoUrl.replace(/'/g, "%27")}') center/cover no-repeat;`;
-        }
     }
 
     const promos = Array.isArray(customer.promos)
@@ -550,19 +543,6 @@ function showCustomerAccount(customer){
         </button>
     `;
 }
-
-function restoreHeaderProfileImage(){
-    try{
-        const saved = JSON.parse(localStorage.getItem("customer_session") || "null");
-        const headerIcon = document.getElementById("headerAccountIcon");
-        if(!saved?.photo_url || !headerIcon) return;
-        const photoUrl = saved.photo_url + (saved.photo_url.includes("?") ? "&" : "?") + "v=" + Date.now();
-        headerIcon.className = "";
-        headerIcon.style.cssText = `display:block;width:34px;height:34px;border-radius:50%;background:url('${photoUrl.replace(/'/g, "%27")}') center/cover no-repeat;`;
-    }catch(e){}
-}
-
-document.addEventListener("DOMContentLoaded", restoreHeaderProfileImage);
 
 async function uploadProfilePhoto(input){
     const file = input.files?.[0];
